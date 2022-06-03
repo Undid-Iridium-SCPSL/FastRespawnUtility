@@ -25,7 +25,9 @@ namespace FastRespawnUtility
 
         internal void OnDying(DyingEventArgs ev)
         {
-            if(!RespawnControllerMain.isEnabledAtRuntime){
+            
+            if (!RespawnControllerMain.isEnabledAtRuntime){
+                Log.Debug("OnDying, Plugin disabled at runtime", PluginInstance.Config.IsDebugEnabled);
                 return;
             }
 
@@ -40,32 +42,33 @@ namespace FastRespawnUtility
                 return;
             }
 
-            Log.Debug("OnDying 1", PluginInstance.Config.IsDebugEnabled);
+            Log.Debug("OnDying, Target was defined and was not spectator/none. ", PluginInstance.Config.IsDebugEnabled);
             if(PluginInstance.Config.RespawnRerollTypes.TryGetValue(ev.Target.Role.Type, out Dictionary<RoleType, float> rolesToSpawnAs)){
                 foreach (KeyValuePair<RoleType, float> rolesToCheck in rolesToSpawnAs){
-                    float cur_ran = UnityEngine.Random.value;
-                    Log.Debug($"OnDying 1.5 {cur_ran}", PluginInstance.Config.IsDebugEnabled);
-                    if (cur_ran <= Mathf.Clamp(rolesToCheck.Value, 0.00f, 1.00f))
+                    float currentRandom = UnityEngine.Random.value;
+                    float boundedProabilityVal = Mathf.Clamp(rolesToCheck.Value, 0.00f, 1.00f);
+                    Log.Debug($"OnDying, RespawnRerollType currentRandom: {currentRandom} versus probability: {boundedProabilityVal}", PluginInstance.Config.IsDebugEnabled);
+                    if (currentRandom <= boundedProabilityVal)
                     {
-                        Log.Debug("OnDying 2", PluginInstance.Config.IsDebugEnabled);
+                        Log.Debug("OnDying, Proability was within threshhold.", PluginInstance.Config.IsDebugEnabled);
                         if (CustomRespawn(rolesToCheck.Key, RespawnType.RoleToRoleRules, ev.Target)){
-                            Log.Debug("OnDying 3", PluginInstance.Config.IsDebugEnabled);
+                            Log.Debug("OnDying CustomRespawn was successful for probability path.", PluginInstance.Config.IsDebugEnabled);
                             return;
                         }
                     }
                 }
-                Log.Debug("OnDying 4", PluginInstance.Config.IsDebugEnabled);
+                Log.Debug("OnDying, CustomRespawn/Probability did not succeed, defaulting to DefaultByConfig", PluginInstance.Config.IsDebugEnabled);
                 CustomRespawn(ev.Target.Role.Type, RespawnType.DefaultByConfig, ev.Target);
             }
             else if(PluginInstance.Config.RoleRespawnTime.TryGetValue(ev.Target.Role.Type, out float timeToWait)){
-                Log.Debug("OnDying 5", PluginInstance.Config.IsDebugEnabled);
+                Log.Debug("OnDying, Checking against RoleRespawnTime", PluginInstance.Config.IsDebugEnabled);
                 if(!CustomRespawn(ev.Target.Role.Type, RespawnType.TimeByRole, ev.Target, timeToWait)){
-                    Log.Debug("OnDying 5.5", PluginInstance.Config.IsDebugEnabled);
+                    Log.Debug("OnDying, RoleRespawnTime did not contain Role, running default", PluginInstance.Config.IsDebugEnabled);
                     CustomRespawn(ev.Target.Role.Type, RespawnType.DefaultByConfig, ev.Target);
                 }
             }
             else if(PluginInstance.Config.UniversalRespawnTimer != -1.0f){
-                Log.Debug("OnDying 6", PluginInstance.Config.IsDebugEnabled);
+                Log.Debug("OnDying, Default path", PluginInstance.Config.IsDebugEnabled);
                 CustomRespawn(ev.Target.Role.Type, RespawnType.DefaultByConfig, ev.Target);
             }
         }
@@ -80,24 +83,25 @@ namespace FastRespawnUtility
         internal void OnSpawning(SpawningEventArgs ev)
         {
             if(!RespawnControllerMain.isEnabledAtRuntime){
+                Log.Debug("OnSpawning, Plugin disabled at runtime", PluginInstance.Config.IsDebugEnabled);
                 return;
             }
 
             if(PluginInstance.Config.StopSpawningAfterWarhead && Warhead.IsDetonated){
-                Log.Debug("OnSpawning 1", PluginInstance.Config.IsDebugEnabled);
+                Log.Debug("OnSpawning, StopSpawningAfterWarhead and Detonated was true", PluginInstance.Config.IsDebugEnabled);
                 Timing.CallDelayed(PluginInstance.Config.SpawningReRollDelay, delegate
                 {
-                    Log.Debug("OnSpawning 1.5", PluginInstance.Config.IsDebugEnabled);
+                    Log.Debug("OnSpawning, Running SpawningReRoll", PluginInstance.Config.IsDebugEnabled);
                     ev.Player.SetRole(RoleType.Spectator, Exiled.API.Enums.SpawnReason.ForceClass);
                 });
                 return;
             }
             if(!ev.Player.SessionVariables.TryGetValue("RespawnedAtStart", out object startVerifiedFlag)){
-                Log.Debug("OnSpawning 2", PluginInstance.Config.IsDebugEnabled);
+                Log.Debug("OnSpawning, First time spawning, RespawnedAtStart added to SessionVar", PluginInstance.Config.IsDebugEnabled);
                 ev.Player.SessionVariables.Add("RespawnedAtStart", true);
                 Timing.CallDelayed(PluginInstance.Config.SpawningReRollDelay, delegate
                 {
-                    Log.Debug("OnSpawning 2.5", PluginInstance.Config.IsDebugEnabled);
+                    Log.Debug("OnSpawning, Running RespawnedAtStart", PluginInstance.Config.IsDebugEnabled);
                     ev.Player.SetRole(PluginInstance.Config.UniversalDefaultRole, Exiled.API.Enums.SpawnReason.ForceClass);
                 });
             }
