@@ -46,6 +46,8 @@ namespace FastRespawnUtility
             RespawnControllerMonitor = new RespawnController(this);
             PlayerEvents.Dying += RespawnControllerMonitor.OnDying;
             PlayerEvents.Spawning += RespawnControllerMonitor.OnSpawning;
+            ServerEvents.RespawningTeam += RespawnControllerMonitor.OnSpawningTeam;
+
             isEnabledAtRuntime = true;
             base.OnEnabled();
         }
@@ -55,6 +57,7 @@ namespace FastRespawnUtility
         {
             PlayerEvents.Dying -= RespawnControllerMonitor.OnDying;
             PlayerEvents.Spawning -= RespawnControllerMonitor.OnSpawning;
+            ServerEvents.RespawningTeam -= RespawnControllerMonitor.OnSpawningTeam;
             CleanupPlayers();
             isEnabledAtRuntime = false;
             Instance = null;

@@ -70,6 +70,13 @@ namespace FastRespawnUtility
             }
         }
 
+        internal void OnSpawningTeam(RespawningTeamEventArgs ev)
+        {
+            if(!RespawnControllerMain.Instance.Config.NormalGameSpawning){
+                ev.IsAllowed = false;
+            }
+        }
+
         internal void OnSpawning(SpawningEventArgs ev)
         {
             if(!RespawnControllerMain.isEnabledAtRuntime){

@@ -44,6 +44,12 @@ namespace FastRespawnUtility
         public float SpawningReRollDelay { get; set; } = 2.0f;
 
         /// <summary>
+        /// Prevent normal game spawning (Spawning Team for example).
+        /// </summary>
+        [Description("Prevent normal game spawning (Spawning Team for example).")]
+        public bool NormalGameSpawning { get; set; } = false;
+
+        /// <summary>
         /// What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole
         /// </summary>
         [Description("What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole.")]
