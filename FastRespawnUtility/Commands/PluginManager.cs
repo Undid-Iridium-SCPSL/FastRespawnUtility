@@ -68,6 +68,31 @@ namespace FastRespawnUtility.Commands
 						return false;
 				}
 			}
+			else if (arguments.Count == 3)
+			{
+				String firstParameter = arguments.At(0).ToUpper();
+				String secondParameter = arguments.At(1);
+				float ThirdParameter = float.Parse(arguments.At(2));
+				switch (firstParameter)
+				{
+					case "SETDEFAULTROLE":
+						try
+						{
+							Main.Instance.Config.UniversalDefaultRole = (RoleType)Enum.Parse(typeof(RoleType), secondParameter);
+							Main.Instance.Config.UniversalRespawnTimer = ThirdParameter;
+							response = $"UniversalDefaultRole set to: {secondParameter} ";
+							return true;
+						}
+						catch (Exception generic)
+						{
+							response = $"Unable to parse role provided, must be exact with capitalization: {secondParameter} was not a valid RoleType";
+							return false;
+						}
+					default:
+						response = $"Unknown parameter provided: {firstParameter} is not a valid choice";
+						return false;
+				}
+			}
 			response = $"Unknown path was taken {string.Join(", ", arguments)}";
 			return false;
 		}
