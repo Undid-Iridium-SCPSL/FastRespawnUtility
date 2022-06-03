@@ -25,6 +25,10 @@ namespace FastRespawnUtility
 
         internal void OnDying(DyingEventArgs ev)
         {
+            if(!PluginInstance.isEnabledAtRuntime){
+                return;
+            }
+
             if(ev.Target == null){
                 return;
             }
@@ -64,6 +68,29 @@ namespace FastRespawnUtility
                 Log.Debug("OnDying 6", PluginInstance.Config.IsDebugEnabled);
                 CustomRespawn(ev.Target.Role.Type, RespawnType.DefaultByConfig, ev.Target);
             }
+        }
+
+        internal void OnSpawning(SpawningEventArgs ev)
+        {
+            if(PluginInstance.Config.StopSpawningAfterWarhead && Warhead.IsDetonated){
+                Log.Debug("OnSpawning 1", PluginInstance.Config.IsDebugEnabled);
+                Timing.CallDelayed(PluginInstance.Config.SpawningReRollDelay, delegate
+                {
+                    Log.Debug("OnSpawning 1.5", PluginInstance.Config.IsDebugEnabled);
+                    ev.Player.SetRole(RoleType.Spectator, Exiled.API.Enums.SpawnReason.ForceClass);
+                });
+                return;
+            }
+            if(!ev.Player.SessionVariables.TryGetValue("RespawnedAtStart", out object startVerifiedFlag)){
+                Log.Debug("OnSpawning 2", PluginInstance.Config.IsDebugEnabled);
+                ev.Player.SessionVariables.Add("RespawnedAtStart", true);
+                Timing.CallDelayed(PluginInstance.Config.SpawningReRollDelay, delegate
+                {
+                    Log.Debug("OnSpawning 2.5", PluginInstance.Config.IsDebugEnabled);
+                    ev.Player.SetRole(PluginInstance.Config.UniversalDefaultRole, Exiled.API.Enums.SpawnReason.ForceClass);
+                });
+            }
+           
         }
 
         private bool CustomRespawn(RoleType role, RespawnType respawnReason, Player player, float secondsToWait = 5.0f)
