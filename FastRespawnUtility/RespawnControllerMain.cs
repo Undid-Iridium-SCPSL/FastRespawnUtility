@@ -32,7 +32,7 @@ namespace FastRespawnUtility
         public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
 
         /// <inheritdoc />
-        public override Version Version { get; } = new Version(1, 0, 2);
+        public override Version Version { get; } = new Version(1, 0, 3);
 
         /// <summary>
         /// Gets an instance of the <see cref="RespawnController"/> class.
@@ -46,6 +46,8 @@ namespace FastRespawnUtility
             RespawnControllerMonitor = new RespawnController(this);
             PlayerEvents.Dying += RespawnControllerMonitor.OnDying;
             PlayerEvents.Spawning += RespawnControllerMonitor.OnSpawning;
+            ServerEvents.RespawningTeam += RespawnControllerMonitor.OnSpawningTeam;
+
             isEnabledAtRuntime = true;
             base.OnEnabled();
         }
@@ -55,6 +57,7 @@ namespace FastRespawnUtility
         {
             PlayerEvents.Dying -= RespawnControllerMonitor.OnDying;
             PlayerEvents.Spawning -= RespawnControllerMonitor.OnSpawning;
+            ServerEvents.RespawningTeam -= RespawnControllerMonitor.OnSpawningTeam;
             CleanupPlayers();
             isEnabledAtRuntime = false;
             Instance = null;
