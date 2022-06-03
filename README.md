@@ -21,10 +21,21 @@ Ability to control respawn rules.
 # Example config
 ```
 fast_respawn_utility:
+# Whether to enabled or disable plugin
   is_enabled: true
+  # Whether to enabled/disable debug
   is_debug_enabled: true
+  # Sets the default time to wait to respawn a player. If set to -1.0f then player will not respawn through this plugin.
   universal_respawn_timer: 5
+  # Default role for all classes to respawn as.
   universal_default_role: ChaosMarauder
+  # Whether to allow spawning after Warhead goes off.
+  stop_spawning_after_warhead: true
+  # How long to wait to respawn a player at start of round to UniversalRole.
+  spawning_re_roll_delay: 2
+  # Prevent normal game spawning (Spawning Team for example).
+  normal_game_spawning: false
+  # What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole.
   respawn_reroll_types:
     FacilityGuard:
       FacilityGuard: 0.75
@@ -66,6 +77,7 @@ fast_respawn_utility:
       FacilityGuard: 0.75
     Spectator:
       FacilityGuard: 0.75
+  # Sets how long to wait before respawning role, -1.0f means do not respawn, if not in this list then it defaults to UniversalRespawnTimer value.
   role_respawn_time:
     FacilityGuard: 5
     NtfPrivate: 5
