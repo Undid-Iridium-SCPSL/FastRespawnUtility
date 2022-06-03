@@ -13,14 +13,14 @@ namespace FastRespawnUtility
     using PlayerEvents = Exiled.Events.Handlers.Player;
     using ServerEvents = Exiled.Events.Handlers.Server;
 
-    public class Main : Plugin<Config>
+    public class RespawnControllerMain : Plugin<Config>
     {
-        public bool isEnabledAtRuntime { get; set; }
+        public static bool isEnabledAtRuntime { get; set; }
 
         /// <summary>
-        /// Gets a static instance of the <see cref="Main"/> class.
+        /// Gets a static instance of the <see cref="RespawnControllerMain"/> class.
         /// </summary>
-        public static Main Instance { get; private set; }
+        public static RespawnControllerMain Instance { get; private set; }
 
         /// <inheritdoc />
         public override string Author => "Undid-Iridium";
@@ -32,7 +32,7 @@ namespace FastRespawnUtility
         public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
 
         /// <inheritdoc />
-        public override Version Version { get; } = new Version(1, 0, 1);
+        public override Version Version { get; } = new Version(1, 0, 2);
 
         /// <summary>
         /// Gets an instance of the <see cref="RespawnController"/> class.

@@ -9,9 +9,9 @@ namespace FastRespawnUtility
 {
     public class RespawnController
     {
-        private Main PluginInstance;
+        private RespawnControllerMain PluginInstance;
 
-        public RespawnController(Main main)
+        public RespawnController(RespawnControllerMain main)
         {
             this.PluginInstance = main;
         }
@@ -25,7 +25,7 @@ namespace FastRespawnUtility
 
         internal void OnDying(DyingEventArgs ev)
         {
-            if(!PluginInstance.isEnabledAtRuntime){
+            if(!RespawnControllerMain.isEnabledAtRuntime){
                 return;
             }
 
@@ -72,6 +72,10 @@ namespace FastRespawnUtility
 
         internal void OnSpawning(SpawningEventArgs ev)
         {
+            if(!RespawnControllerMain.isEnabledAtRuntime){
+                return;
+            }
+
             if(PluginInstance.Config.StopSpawningAfterWarhead && Warhead.IsDetonated){
                 Log.Debug("OnSpawning 1", PluginInstance.Config.IsDebugEnabled);
                 Timing.CallDelayed(PluginInstance.Config.SpawningReRollDelay, delegate
