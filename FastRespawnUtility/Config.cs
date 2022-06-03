@@ -31,6 +31,17 @@ namespace FastRespawnUtility
         [Description("Default role for all classes to respawn as.")]
         public RoleType UniversalDefaultRole { get; set; } = RoleType.ChaosMarauder;
 
+        /// <summary>
+        /// Whether to allow spawning after Warhead goes off.
+        /// </summary>
+        [Description("Whether to allow spawning after Warhead goes off.")]
+        public bool StopSpawningAfterWarhead { get; set; } = false;
+
+        /// <summary>
+        /// How long to wait to respawn a player at start of round to UniversalRole.
+        /// </summary>
+        [Description("How long to wait to respawn a player at start of round to UniversalRole.")]
+        public float SpawningReRollDelay { get; set; } = 2.0f;
 
         /// <summary>
         /// What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole
@@ -96,6 +107,6 @@ namespace FastRespawnUtility
                 {RoleType.Tutorial, -1.0f},
 
         };
-       
+
     }
 }

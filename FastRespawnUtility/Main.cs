@@ -15,6 +15,8 @@ namespace FastRespawnUtility
 
     public class Main : Plugin<Config>
     {
+        public bool isEnabledAtRuntime { get; set; }
+
         /// <summary>
         /// Gets a static instance of the <see cref="Main"/> class.
         /// </summary>
@@ -43,6 +45,8 @@ namespace FastRespawnUtility
             Instance = this;
             RespawnControllerMonitor = new RespawnController(this);
             PlayerEvents.Dying += RespawnControllerMonitor.OnDying;
+            PlayerEvents.Spawning += RespawnControllerMonitor.OnSpawning;
+            isEnabledAtRuntime = true;
             base.OnEnabled();
         }
 
@@ -50,9 +54,24 @@ namespace FastRespawnUtility
         public override void OnDisabled()
         {
             PlayerEvents.Dying -= RespawnControllerMonitor.OnDying;
+            PlayerEvents.Spawning -= RespawnControllerMonitor.OnSpawning;
+            CleanupPlayers();
+            isEnabledAtRuntime = false;
             Instance = null;
             RespawnControllerMonitor = null;
             base.OnDisabled();
+        }
+
+        private void CleanupPlayers()
+        {
+            try
+            {
+                foreach (Player player in Player.List)
+                {
+                    player.SessionVariables.Remove("RespawnedAtStart");
+                }
+            }
+            catch { }
         }
     }
 }
