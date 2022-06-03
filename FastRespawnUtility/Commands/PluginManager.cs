@@ -33,11 +33,11 @@ namespace FastRespawnUtility.Commands
 				switch (currentCommand)
 				{
 					case "ENABLE":
-						Main.Instance.isEnabledAtRuntime = true;
+						RespawnControllerMain.isEnabledAtRuntime = true;
 						response = "Command successfully ran, Plugin is enabled";
 						return true;
 					case "DISABLE":
-						Main.Instance.isEnabledAtRuntime = false;
+						RespawnControllerMain.isEnabledAtRuntime = false;
 						response = "Command successfully ran, Plugin is disabled";
 						return true;
 					default:
@@ -54,7 +54,7 @@ namespace FastRespawnUtility.Commands
 					case "SETDEFAULTROLE":
 						try
 						{
-							Main.Instance.Config.UniversalDefaultRole = (RoleType)Enum.Parse(typeof(RoleType), secondParameter);
+							RespawnControllerMain.Instance.Config.UniversalDefaultRole = (RoleType)Enum.Parse(typeof(RoleType), secondParameter);
 							response = $"UniversalDefaultRole set to: {secondParameter} ";
 							return true;
 						}
@@ -78,8 +78,8 @@ namespace FastRespawnUtility.Commands
 					case "SETDEFAULTROLE":
 						try
 						{
-							Main.Instance.Config.UniversalDefaultRole = (RoleType)Enum.Parse(typeof(RoleType), secondParameter);
-							Main.Instance.Config.UniversalRespawnTimer = ThirdParameter;
+							RespawnControllerMain.Instance.Config.UniversalDefaultRole = (RoleType)Enum.Parse(typeof(RoleType), secondParameter);
+							RespawnControllerMain.Instance.Config.UniversalRespawnTimer = ThirdParameter;
 							response = $"UniversalDefaultRole set to: {secondParameter} ";
 							return true;
 						}
