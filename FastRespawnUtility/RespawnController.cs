@@ -149,7 +149,7 @@ namespace FastRespawnUtility
                     });
                     break;
                 default:
-                    break;
+                    return false;
             }
             return true;
         }
