@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace FastRespawnUtility
 {
@@ -26,10 +27,22 @@ namespace FastRespawnUtility
         public float UniversalRespawnTimer { get; set; } = 5.0f;
 
         /// <summary>
+        /// Sets the default time to wait to reposition a player. Tune this based on server 
+        /// </summary>
+        [Description("Sets the default time to wait to respawn a player for their custom position. Tune this based on server ")]
+        public float UniversalCustomSpawnWaitTime { get; set; } = 1.5f;
+
+        /// <summary>
         /// Default role for all classes to respawn as.
         /// </summary>
         [Description("Default role for all classes to respawn as.")]
         public RoleType UniversalDefaultRole { get; set; } = RoleType.ChaosMarauder;
+
+        /// <summary>
+        /// Default spawn location for all classes to respawn as. Be VERY specific as map is semi-procedural
+        /// </summary>
+        [Description("Default spawn location for all classes to respawn as. Be VERY specific as map is semi-procedural")]
+        public Vector3 UniversalCustomSpawn { get; set; } = Vector3.negativeInfinity;
 
         /// <summary>
         /// Whether to allow spawning after Warhead goes off.
@@ -46,8 +59,14 @@ namespace FastRespawnUtility
         /// <summary>
         /// Prevent normal game spawning (Spawning Team for example).
         /// </summary>
-        [Description("Prevent normal game spawning (Spawning Team for example).")]
+        [Description("Normal game spawning (Spawning Team for example).")]
         public bool NormalGameSpawning { get; set; } = false;
+
+        /// <summary>
+        /// Overwrite first spawn the first time only."
+        /// </summary>
+        [Description("Overwrite first spawn the first time only.")]
+        public bool FirstSpawnOnly { get; set; } = false;
 
         /// <summary>
         /// What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole
@@ -114,5 +133,37 @@ namespace FastRespawnUtility
 
         };
 
+        /// <summary>
+        /// What to respawn a player as based on their previous role. Probability occurance given by float. If no role can be selected based on probability, default to UniversalDefaultRole
+        /// </summary>
+        [Description("Where to respawn a player as based on their previous role. If not specified default to UniversalRespawnPosition, NegativeInfinity means do not respawn at custom location")]
+        public Dictionary<RoleType, Vector3> RespawnRollSpawnPositions { get; set; } = new Dictionary<RoleType, Vector3>
+        {
+                { RoleType.FacilityGuard, Vector3.negativeInfinity },
+                { RoleType.NtfPrivate, Vector3.negativeInfinity },
+                { RoleType.NtfSergeant, Vector3.negativeInfinity },
+                { RoleType.NtfCaptain, Vector3.negativeInfinity },
+                { RoleType.NtfSpecialist, Vector3.negativeInfinity },
+
+                { RoleType.ChaosConscript, Vector3.negativeInfinity },
+                { RoleType.ChaosMarauder, Vector3.negativeInfinity },
+                { RoleType.ChaosRepressor, Vector3.negativeInfinity },
+                { RoleType.ChaosRifleman, Vector3.negativeInfinity },
+
+                { RoleType.Scp049, Vector3.negativeInfinity },
+                { RoleType.Scp0492, Vector3.negativeInfinity },
+                { RoleType.Scp079,  Vector3.negativeInfinity },
+                { RoleType.Scp096,  Vector3.negativeInfinity },
+                { RoleType.Scp106,  Vector3.negativeInfinity },
+                { RoleType.Scp173,  Vector3.negativeInfinity },
+                { RoleType.Scp93953,  Vector3.negativeInfinity },
+                { RoleType.Scp93989,  Vector3.negativeInfinity },
+
+                {RoleType.ClassD,   Vector3.negativeInfinity },
+                {RoleType.Scientist,   Vector3.negativeInfinity },
+                {RoleType.Tutorial,   Vector3.negativeInfinity },
+                {RoleType.Spectator,   Vector3.negativeInfinity },
+
+        };
     }
 }

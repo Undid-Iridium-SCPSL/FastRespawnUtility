@@ -31,6 +31,10 @@ namespace FastRespawnUtility
                 return;
             }
 
+            if(PluginInstance.Config.FirstSpawnOnly){
+                return;
+            }
+
             if(ev.Target == null){
                 return;
             }
@@ -116,6 +120,7 @@ namespace FastRespawnUtility
                     Log.Debug($"RespawnType.DefaultByConfig {PluginInstance.Config?.UniversalRespawnTimer ?? secondsToWait}", PluginInstance.Config.IsDebugEnabled);
                     Timing.CallDelayed(PluginInstance.Config?.UniversalRespawnTimer ?? secondsToWait, delegate {
                         player.SetRole(PluginInstance.Config.UniversalDefaultRole, Exiled.API.Enums.SpawnReason.ForceClass);
+                        CustomizePlayerPosition(player);
                     });
                     break;
                 case RespawnType.RoleToRoleRules:
@@ -128,6 +133,7 @@ namespace FastRespawnUtility
                         }
                         Timing.CallDelayed(timeToWait, delegate {
                             player.SetRole(role, Exiled.API.Enums.SpawnReason.ForceClass);
+                            CustomizePlayerPosition(player, role);
                         });
                     }
                     else{
@@ -146,12 +152,31 @@ namespace FastRespawnUtility
                     Timing.CallDelayed(secondsToWait, delegate
                     {
                         player.SetRole(role, Exiled.API.Enums.SpawnReason.ForceClass);
+                        CustomizePlayerPosition(player, role);
                     });
                     break;
                 default:
                     return false;
             }
             return true;
+        }
+
+        private void CustomizePlayerPosition(Player player){
+            if (!PluginInstance.Config.UniversalCustomSpawn.Equals(Vector3.negativeInfinity))
+            {
+                Timing.CallDelayed(PluginInstance.Config.UniversalCustomSpawnWaitTime, delegate { player.Position = PluginInstance.Config.UniversalCustomSpawn; });
+            }
+        }
+        private void CustomizePlayerPosition(Player player, RoleType role)
+        {
+            if (PluginInstance.Config.RespawnRollSpawnPositions.TryGetValue(role, out Vector3 pos))
+            {
+                Timing.CallDelayed(PluginInstance.Config.UniversalCustomSpawnWaitTime, delegate { player.Position = pos; });
+            }
+            else if (!PluginInstance.Config.UniversalCustomSpawn.Equals(Vector3.negativeInfinity))
+            {
+                Timing.CallDelayed(PluginInstance.Config.UniversalCustomSpawnWaitTime, delegate { player.Position = PluginInstance.Config.UniversalCustomSpawn; });
+            }
         }
 
     }
