@@ -18,13 +18,14 @@ namespace FastRespawnUtility.Commands
 
 		public string Description { get; } = "Fast Respawn Utility controller";
 
+		public static string HelpString = "Please provide the correct syntax:\n" +
+						   "FastRespawnUtility (disable/enable)\n" +
+						   "FastRespawnUtility (setDefaultRole) (Role)";
 		public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
 		{
 			if (arguments.Count == 0 || arguments.Count >= 3)
 			{
-				response = "Please provide the correct syntax:\n" +
-						   "FastRespawnUtility (disable/enable)\n" +
-						   "FastRespawnUtility (setDefaultRole) (Role)";
+				response = HelpString;
 				return false;
 			}
 			else if (arguments.Count == 1)
