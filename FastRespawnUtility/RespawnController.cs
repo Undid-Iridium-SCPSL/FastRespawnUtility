@@ -79,7 +79,13 @@ namespace FastRespawnUtility
 
         internal void OnSpawningTeam(RespawningTeamEventArgs ev)
         {
-            if(!RespawnControllerMain.Instance.Config.NormalGameSpawning){
+            if (!RespawnControllerMain.isEnabledAtRuntime)
+            {
+                Log.Debug("OnSpawning, Plugin disabled at runtime", PluginInstance.Config.IsDebugEnabled);
+                return;
+            }
+
+            if (!RespawnControllerMain.Instance.Config.NormalGameSpawning){
                 ev.IsAllowed = false;
             }
         }
