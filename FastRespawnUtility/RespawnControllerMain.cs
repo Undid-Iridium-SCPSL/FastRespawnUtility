@@ -32,7 +32,7 @@ namespace FastRespawnUtility
         public override Version RequiredExiledVersion { get; } = new Version(5, 1, 3);
 
         /// <inheritdoc />
-        public override Version Version { get; } = new Version(1, 0, 1);
+        public override Version Version { get; } = new Version(1, 0, 0);
 
         /// <summary>
         /// Gets an instance of the <see cref="RespawnController"/> class.
